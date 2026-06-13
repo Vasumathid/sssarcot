@@ -81,6 +81,7 @@
         --txt: #1a1a2e;
         --txm: #4a5568;
         --txl: #718096;
+        --ticker-h: 34px;
       }
       html {
         scroll-behavior: smooth;
@@ -100,6 +101,8 @@
         padding: 8px 0;
         overflow: hidden;
         white-space: nowrap;
+        height: var(--ticker-h);
+        line-height: 1.4;
       }
       .ticker-inner {
         display: inline-block;
@@ -120,7 +123,7 @@
       /* ── NAV ── */
       nav {
         position: fixed;
-        top: 32px;
+        top: var(--ticker-h);
         left: 0;
         width: 100%;
         z-index: 1000;
@@ -145,12 +148,19 @@
         align-items: center;
         gap: 12px;
         text-decoration: none;
+        flex-shrink: 0;
+        min-width: 0;
       }
       .nav-logo img {
-        height: 55px;
-        width: 200px;
+        height: 44px;
+        width: auto;
+        max-width: 160px;
         object-fit: contain;
         border-radius: 6px;
+        flex-shrink: 0;
+      }
+      .nav-logo-txt {
+        min-width: 0;
       }
       .nav-logo-txt span:first-child {
         display: block;
@@ -159,6 +169,7 @@
         font-weight: 700;
         color: var(--white);
         line-height: 1.2;
+        white-space: nowrap;
       }
       .nav-logo-txt span:last-child {
         display: block;
@@ -166,6 +177,7 @@
         color: var(--gold);
         letter-spacing: 1.5px;
         text-transform: uppercase;
+        white-space: nowrap;
       }
       .nav-links {
         display: flex;
@@ -217,7 +229,9 @@
         flex-direction: column;
         gap: 5px;
         cursor: pointer;
-        padding: 4px;
+        padding: 8px;
+        flex-shrink: 0;
+        margin-left: 8px;
       }
       .ham span {
         width: 24px;
@@ -234,6 +248,8 @@
         min-height: 600px;
         overflow: hidden;
         background: var(--navy);
+        /* push below ticker + nav */
+        margin-top: 0;
       }
       .hero-slides {
         position: absolute;
@@ -261,7 +277,6 @@
           rgba(27, 122, 138, 0.2) 100%
         );
       }
-      /* Particle canvas */
       #pCanvas {
         position: absolute;
         inset: 0;
@@ -275,7 +290,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: 0 8%;
+        padding: 100px 8% 60px;
         max-width: 780px;
       }
       .hero-badge {
@@ -300,10 +315,11 @@
         border-radius: 50%;
         background: var(--gold);
         animation: pdot 2s infinite;
+        flex-shrink: 0;
       }
       .hero h1 {
         font-family: "Playfair Display", serif;
-        font-size: clamp(2.6rem, 6vw, 4.8rem);
+        font-size: clamp(2.2rem, 6vw, 4.8rem);
         font-weight: 900;
         color: var(--white);
         line-height: 1.1;
@@ -315,7 +331,7 @@
         font-style: normal;
       }
       .hero-sub {
-        font-size: clamp(0.95rem, 2vw, 1.2rem);
+        font-size: clamp(0.9rem, 2vw, 1.2rem);
         color: rgba(255, 255, 255, 0.72);
         line-height: 1.75;
         max-width: 560px;
@@ -364,7 +380,6 @@
         border-color: var(--gold);
         background: rgba(201, 148, 58, 0.1);
       }
-      /* Slide dots */
       .slide-dots {
         position: absolute;
         bottom: 32px;
@@ -389,7 +404,6 @@
         background: var(--gold);
         transform: scale(1.3);
       }
-      /* Scroll hint */
       .scroll-hint {
         position: absolute;
         bottom: 36px;
@@ -427,6 +441,7 @@
       }
       .stat {
         text-align: center;
+        min-width: 80px;
       }
       .stat-n {
         font-family: "Playfair Display", serif;
@@ -463,7 +478,7 @@
       }
       .sh {
         font-family: "Playfair Display", serif;
-        font-size: clamp(1.9rem, 4vw, 2.9rem);
+        font-size: clamp(1.7rem, 4vw, 2.9rem);
         font-weight: 700;
         color: var(--navy);
         line-height: 1.2;
@@ -966,6 +981,7 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         font-size: 13px;
         color: rgba(255, 255, 255, 0.75);
+        gap: 12px;
       }
       .conc-row:last-child {
         border-bottom: none;
@@ -973,6 +989,7 @@
       .conc-pct {
         color: var(--gold);
         font-weight: 700;
+        white-space: nowrap;
       }
 
       /* ── CONTACT ── */
@@ -1066,6 +1083,7 @@
         transition:
           border-color 0.2s,
           background 0.2s;
+        width: 100%;
       }
       .fg input:focus,
       .fg select:focus,
@@ -1387,8 +1405,11 @@
         transform: none;
       }
 
-      /* ── RESPONSIVE ── */
+      /* ══════════════════════════════
+         RESPONSIVE — 960 px
+      ══════════════════════════════ */
       @media (max-width: 960px) {
+        /* Nav */
         .nav-links {
           display: none;
         }
@@ -1396,17 +1417,26 @@
           display: flex;
           flex-direction: column;
           position: fixed;
-          top: 68px;
+          top: calc(var(--ticker-h) + 68px);
           left: 0;
           right: 0;
-          background: var(--navy);
+          background: rgba(10, 22, 40, 0.98);
           padding: 22px 5%;
           gap: 14px;
           border-bottom: 1px solid rgba(201, 148, 58, 0.2);
+          max-height: calc(100vh - var(--ticker-h) - 68px);
+          overflow-y: auto;
+          z-index: 999;
+        }
+        nav.scrolled + * .nav-links.open,
+        nav.scrolled .nav-links.open {
+          top: 68px;
         }
         .ham {
           display: flex;
         }
+
+        /* Grids → single column */
         .about-grid,
         .chair-grid,
         .fees-grid,
@@ -1415,18 +1445,31 @@
           grid-template-columns: 1fr;
           gap: 36px;
         }
+
+        /* Gallery → 2 cols */
         .gallery-grid {
           grid-template-columns: repeat(2, 1fr);
         }
+        .gitem.wide {
+          grid-column: span 1;
+        }
+
+        /* Footer */
         .footer-grid {
           grid-template-columns: 1fr 1fr;
         }
+
+        /* Stats */
         .stat-div {
           display: none;
         }
+
+        /* Contact form */
         .frow {
           grid-template-columns: 1fr;
         }
+
+        /* About floats */
         .about-float1 {
           right: 0;
           bottom: -14px;
@@ -1434,20 +1477,266 @@
         .about-float2 {
           display: none;
         }
-        .gitem.wide {
-          grid-column: span 1;
+
+        /* Chairman photo — don't keep 440px tall when stacked */
+        .chair-photo {
+          height: 320px;
+        }
+        .chair-grid {
+          padding-bottom: 28px;
+        } /* room for badge */
+
+        /* Bus image */
+        .bus-img {
+          height: 220px;
+        }
+
+        /* Sections */
+        section {
+          padding: 64px 6%;
+        }
+        .bus-sec {
+          padding: 48px 6%;
         }
       }
+
+      /* ══════════════════════════════
+         RESPONSIVE — 600 px (tablets portrait / large phones)
+      ══════════════════════════════ */
       @media (max-width: 600px) {
-        section {
-          padding: 60px 5%;
+        /* Ticker smaller */
+        :root {
+          --ticker-h: 32px;
         }
+        .ticker-bar {
+          font-size: 11px;
+        }
+        .ticker-inner span {
+          margin: 0 32px;
+        }
+
+        /* Sections */
+        section {
+          padding: 52px 5%;
+        }
+        .bus-sec {
+          padding: 40px 5%;
+        }
+        .hdr {
+          margin-bottom: 36px;
+        }
+
+        /* Stats bar */
+        .stats {
+          padding: 20px 5%;
+          gap: 14px;
+          justify-content: center;
+        }
+        .stat {
+          min-width: calc(50% - 14px);
+        }
+        .stat-n {
+          font-size: 1.8rem;
+        }
+
+        /* Hero */
+        .hero-content {
+          padding: 90px 5% 56px;
+        }
+        .hero-btns {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .btn-gold,
+        .btn-ghost {
+          width: 100%;
+          justify-content: center;
+          text-align: center;
+        }
+        .scroll-hint {
+          display: none;
+        }
+
+        /* About */
+        .about-main-img {
+          height: 260px;
+        }
+        .about-float1 {
+          display: none;
+        }
+        .about-txt p {
+          font-size: 14.5px;
+        }
+
+        /* Courses */
+        .courses-grid {
+          grid-template-columns: 1fr;
+        }
+
+        /* Chairman */
+        .chair-photo {
+          height: 260px;
+        }
+        .chair-badge {
+          font-size: 11px;
+          padding: 6px 16px;
+        }
+
+        /* Gallery */
         .gallery-grid {
           grid-template-columns: 1fr 1fr;
-          grid-auto-rows: 160px;
+          grid-auto-rows: 150px;
+          gap: 8px;
         }
+
+        /* Facilities */
+        .feat-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        /* Fees */
+        .fee-table td {
+          padding: 8px 10px;
+          font-size: 12.5px;
+        }
+        .fees-note {
+          padding: 20px;
+        }
+        .concession-card {
+          padding: 16px;
+        }
+        .conc-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 2px;
+        }
+
+        /* Contact form */
+        .cform {
+          padding: 22px 18px;
+        }
+
+        /* Footer */
         .footer-grid {
           grid-template-columns: 1fr;
+          gap: 28px;
+        }
+        .fbrand p {
+          max-width: 100%;
+        }
+        .fbot {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        /* Bus */
+        .bus-img {
+          height: 180px;
+        }
+
+        /* Nav logo — shrink text on small phones */
+        .nav-logo-txt span:first-child {
+          font-size: 13px;
+        }
+        .nav-logo-txt span:last-child {
+          font-size: 9px;
+        }
+        .nav-logo img {
+          max-width: 120px;
+        }
+
+        /* WhatsApp float */
+        .wa-float {
+          width: 46px;
+          height: 46px;
+          font-size: 20px;
+          bottom: 18px;
+          right: 16px;
+        }
+      }
+
+      /* ══════════════════════════════
+         RESPONSIVE — 420 px (small phones)
+      ══════════════════════════════ */
+      @media (max-width: 420px) {
+        :root {
+          --ticker-h: 30px;
+        }
+        .ticker-bar {
+          font-size: 10px;
+        }
+
+        nav {
+          padding: 0 4%;
+          height: 60px;
+        }
+        .nav-links.open {
+          top: calc(var(--ticker-h) + 60px);
+        }
+
+        section {
+          padding: 44px 4%;
+        }
+        .bus-sec {
+          padding: 36px 4%;
+        }
+
+        .hero-content {
+          padding: 80px 4% 50px;
+        }
+        .hero h1 {
+          font-size: clamp(1.9rem, 8vw, 2.6rem);
+        }
+
+        /* Stats — full width items */
+        .stat {
+          min-width: 100%;
+        }
+
+        /* Courses single col already; ensure cards don't overflow */
+        .course-card {
+          padding: 20px 16px;
+        }
+
+        /* Gallery — single col on very small screens */
+        .gallery-grid {
+          grid-template-columns: 1fr;
+          grid-auto-rows: 200px;
+        }
+
+        /* Facilities */
+        .feat-grid {
+          grid-template-columns: 1fr;
+        }
+
+        /* Fee table — prevent overflow */
+        .fee-table-wrap {
+          overflow-x: auto;
+        }
+        .fee-table td {
+          padding: 8px 8px;
+          font-size: 12px;
+        }
+
+        /* Contact form */
+        .cform {
+          padding: 18px 14px;
+        }
+        .map-wrap iframe {
+          height: 180px;
+        }
+
+        /* Footer */
+        footer {
+          padding: 36px 4% 20px;
+        }
+
+        /* Chair badge — may overflow on very narrow */
+        .chair-badge {
+          font-size: 10px;
+          padding: 6px 12px;
+          white-space: normal;
+          text-align: center;
         }
       }
     </style>
@@ -1460,7 +1749,7 @@
         <span>📞 College Office: 91501 22555 | Secretary: 98942 18555</span>
         <span>🏆 Outstanding University Results Every Year</span>
         <span
-          >🚌 Bus Facility from Vellore, Katpadi, Ranipet, Sholinghur &
+          >🚌 Bus Facility from Vellore, Katpadi, Ranipet, Sholinghur &amp;
           More</span
         >
         <span
@@ -1532,9 +1821,9 @@
         </div>
         <h1>Enter to <em>Learn</em>,<br />Learn to <em>Lead</em></h1>
         <p class="hero-sub">
-          SSS College, Arcot — Premier Arts & Science College in Vellore
-          District with 13 UG & PG programmes, outstanding university results,
-          and industry-aligned education.
+          SSS College, Arcot — Premier Arts &amp; Science College in Vellore
+          District with 13 UG &amp; PG programmes, outstanding university
+          results, and industry-aligned education.
         </p>
         <div class="hero-btns">
           <a href="#courses" class="btn-gold"
@@ -1546,8 +1835,9 @@
                 stroke-width="1.8"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-              /></svg
-          ></a>
+              />
+            </svg>
+          </a>
           <a href="#contact" class="btn-ghost">Book Campus Visit</a>
         </div>
       </div>
@@ -1577,7 +1867,7 @@
     <div class="stats">
       <div class="stat rev">
         <div class="stat-n" data-t="13">0</div>
-        <div class="stat-l">UG & PG Courses</div>
+        <div class="stat-l">UG &amp; PG Courses</div>
       </div>
       <div class="stat-div"></div>
       <div class="stat rev">
@@ -1626,7 +1916,7 @@
           <div class="ey">Our Story</div>
           <h2 class="sh">Shaping Futures in <em>Vellore District</em></h2>
           <p>
-            SSS College, located on Bypass Road, Arcot, is a premier Arts &
+            SSS College, located on Bypass Road, Arcot, is a premier Arts &amp;
             Science institution committed to producing graduates who are ready
             for the demands of a globalized world. Affiliated to Thiruvalluvar
             University, our college combines academic excellence with holistic
@@ -1640,7 +1930,8 @@
           </p>
           <div class="about-quote">
             "If they can please Goddess Saraswathi, they will be pleasing
-            Goddess Lakshmi in turn." <br /><small
+            Goddess Lakshmi in turn."
+            <br /><small
               style="
                 font-size: 0.8rem;
                 opacity: 0.65;
@@ -1681,8 +1972,8 @@
         <div class="ey">Academic Programmes</div>
         <h2 class="sh">Choose Your Path to <em>Excellence</em></h2>
         <p class="ss">
-          13 UG & PG programmes designed for today's competitive world — from
-          Computer Science to Defence Studies.
+          13 UG &amp; PG programmes designed for today's competitive world —
+          from Computer Science to Defence Studies.
         </p>
       </div>
       <div class="courses-grid">
@@ -1880,7 +2171,8 @@
           </p>
           <div class="chair-quote">
             "Take up an idea, make that one idea your life. Think of it, Dream
-            of it, Work for it. You will attain the Goal."<br /><small
+            of it, Work for it. You will attain the Goal."<br />
+            <small
               style="
                 font-size: 0.78rem;
                 opacity: 0.65;
@@ -1918,7 +2210,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Program4.jpg"
-            alt="Annual Day Girls – SSS College"
+            alt="Annual Day Girls"
           />
           <div class="gitem-overlay"><span>Annual Day – Girls</span></div>
         </div>
@@ -1963,7 +2255,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Olympic.jpg"
-            alt="Sports Day Olympic"
+            alt="Sports Day"
           />
           <div class="gitem-overlay"><span>Sports Day</span></div>
         </div>
@@ -1978,7 +2270,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Sportsday.jpg"
-            alt="Placement CTS TCS HCL"
+            alt="Placement"
           />
           <div class="gitem-overlay">
             <span>Placement – TCS, CTS, HCL</span>
@@ -1995,7 +2287,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Cultural.jpg"
-            alt="Cultural Programme"
+            alt="Cultural"
           />
           <div class="gitem-overlay"><span>Cultural Programme</span></div>
         </div>
@@ -2010,7 +2302,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Onam.jpg"
-            alt="Onam Celebration"
+            alt="Onam"
           />
           <div class="gitem-overlay"><span>Onam Celebration</span></div>
         </div>
@@ -2025,7 +2317,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Pongal.jpg"
-            alt="Pongal Celebration"
+            alt="Pongal"
           />
           <div class="gitem-overlay"><span>Pongal Celebration</span></div>
         </div>
@@ -2040,7 +2332,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Library.jpg"
-            alt="Digital Library SSS College"
+            alt="Library"
           />
           <div class="gitem-overlay"><span>Digital Library</span></div>
         </div>
@@ -2055,7 +2347,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Computer-lab.jpg"
-            alt="Computer Lab SSS College"
+            alt="Computer Lab"
           />
           <div class="gitem-overlay"><span>Computer Lab</span></div>
         </div>
@@ -2100,7 +2392,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Program1.jpg"
-            alt="College Day Programme"
+            alt="Programme"
           />
           <div class="gitem-overlay"><span>College Day Programme</span></div>
         </div>
@@ -2115,7 +2407,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Convocation.jpg"
-            alt="University 1st Rank"
+            alt="Convocation"
           />
           <div class="gitem-overlay"><span>University 1st Rank</span></div>
         </div>
@@ -2130,7 +2422,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Graduation-day.jpg"
-            alt="Convocation Day"
+            alt="Graduation"
           />
           <div class="gitem-overlay"><span>Convocation Day</span></div>
         </div>
@@ -2145,7 +2437,7 @@
         >
           <img
             src="https://sss-college.com/images/Gallery/Youth-day.jpg"
-            alt="National Youth Day"
+            alt="Youth Day"
           />
           <div class="gitem-overlay"><span>National Youth Day</span></div>
         </div>
@@ -2193,7 +2485,7 @@
               margin-bottom: 14px;
             "
           />
-          <h3>Chemistry & Physics Lab</h3>
+          <h3>Chemistry &amp; Physics Lab</h3>
           <p>
             Well-ventilated labs equipped with instruments, chemicals and
             adequate safety measures.
@@ -2387,7 +2679,7 @@
             <h3>Admission Requirements</h3>
             <ul>
               <li>
-                Original T.C., Marksheets & Community Certificate (2 Xerox
+                Original T.C., Marksheets &amp; Community Certificate (2 Xerox
                 copies)
               </li>
               <li>2 recently taken passport-size photographs</li>
@@ -2396,8 +2688,8 @@
                 admission)
               </li>
               <li>
-                SC, ST, SCC, Farmer, Beedi Worker, Minority, Pudumai Pen & Tamil
-                Pudhalvan scholarships available
+                SC, ST, SCC, Farmer, Beedi Worker, Minority, Pudumai Pen &amp;
+                Tamil Pudhalvan scholarships available
               </li>
               <li>Ragging strictly prohibited inside and outside campus</li>
               <li>
@@ -2631,8 +2923,7 @@
               onerror="this.style.display = 'none'"
             />
             <div class="fbrand-logo-txt">
-              <span>SSS College</span>
-              <span>Arcot, Vellore District</span>
+              <span>SSS College</span><span>Arcot, Vellore District</span>
             </div>
           </div>
           <p>
@@ -2791,7 +3082,8 @@
 
       /* ── NAV ── */
       function toggleNav() {
-        document.getElementById("navL").classList.toggle("open");
+        const nl = document.getElementById("navL");
+        nl.classList.toggle("open");
       }
       document
         .querySelectorAll(".nav-links a")
@@ -2801,9 +3093,17 @@
           ),
         );
       window.addEventListener("scroll", () => {
-        document
-          .getElementById("nav")
-          .classList.toggle("scrolled", window.scrollY > 80);
+        const nav = document.getElementById("nav");
+        nav.classList.toggle("scrolled", window.scrollY > 80);
+        /* keep mobile menu top in sync when scrolled */
+        const nl = document.getElementById("navL");
+        if (nl.classList.contains("open")) {
+          if (window.scrollY > 80) {
+            nl.style.top = "68px";
+          } else {
+            nl.style.top = "";
+          }
+        }
       });
 
       /* ── SCROLL REVEAL ── */
@@ -2845,10 +3145,9 @@
 
       /* ── LIGHTBOX ── */
       function openLB(src, cap) {
-        const lb = document.getElementById("lb");
         document.getElementById("lb-img").src = src;
         document.getElementById("lb-cap").textContent = cap;
-        lb.classList.add("open");
+        document.getElementById("lb").classList.add("open");
       }
       function closeLB() {
         document.getElementById("lb").classList.remove("open");
